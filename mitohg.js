@@ -10,7 +10,7 @@ var Set = require('collections/set');
 
 var token = crypto.createHash('md5').update(Date.now() + Math.random() + '').digest('hex') + '';
 var tmp = path.join(__dirname, '/data/tmp/', token);
-var muscle = path.join(__dirname, '/Muscle/muscle3.8.31_i86Linux64');
+var muscle = path.join(__dirname, '/Muscle/muscle3.8.31_i86Darwin64');
 
 var sequencePath = process.argv[2];
 var referencePath = path.join(__dirname, './data/RSRS.fa');

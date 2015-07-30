@@ -101,7 +101,7 @@ fs.exists(sequencePath, function (exist) {
 
                 var d = new Set(differences);
 
-                var max = 0;
+                var max = -50000;
                 var result = [];
                 db.forEach(function(s) {
                     var score = s.intersection(d).toArray().length - s.difference(d).toArray().length;

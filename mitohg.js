@@ -10,7 +10,7 @@ var Set = require('collections/set');
 
 var token = crypto.createHash('md5').update(Date.now() + Math.random() + '').digest('hex') + '';
 var tmp = path.join(__dirname, '/data/tmp/', token);
-var muscle = path.join(__dirname, '/Muscle/muscle3.8.31_i86Darwin64');
+var muscle = path.join(__dirname, '/Muscle/muscle3.8.31_i86Linux64');
 
 var sequencePath = process.argv[2];
 var referencePath = path.join(__dirname, './data/RSRS.fa');
@@ -39,14 +39,12 @@ fs.exists(sequencePath, function (exist) {
     reference = reference.join('');
 
     var db = [];
-    //var db2 = [];
     fs
         .readFileSync(dbPath, encoding)
         .split('\n')
         .filter(function(s) { return s !== '' })
         .forEach(function(s) {
             db.push(new Set(('' + s).split(',')));
-            //db2.push(('#' + s.replace(/[()]/g, '')).split(','));
         });
 
     var content = header + '\n' + sequence + '\n\n' + refHeader + '\n' + reference;
@@ -101,20 +99,44 @@ fs.exists(sequencePath, function (exist) {
                     }
                 }
 
-                //console.log(differences);
                 var d = new Set(differences);
 
                 var max = 0;
                 var result = [];
-                db.forEach(function(s, i) {
-                    //var s2 = new Set(db2[i]);
-                    var score = s.intersection(d).toArray().length; //Math.min(s.intersection(d).toArray().length, s2.intersection(d).toArray().length);
+                db.forEach(function(s) {
+                    var score = s.intersection(d).toArray().length - s.difference(d).toArray().length;
                     if (score > max) {
                         max = score;
                         result = s.symmetricDifference(d).toArray();
                     }
                 });
-                console.log(result[0] + '');
+
+                db.forEach(function(s) {
+                    var score = s.intersection(d).toArray().length - s.difference(d).toArray().length;
+
+                    if (score == max) {
+                        console.log(s.symmetricDifference(d).toArray()[0]);
+                    }
+                });
+
+                // Если очень много данных отсутствует
+                if (max == 0) {
+                    db.forEach(function(s) {
+                        var score = s.intersection(d).toArray().length;
+                        if (score > max) {
+                            max = score;
+                            result = s.symmetricDifference(d).toArray();
+                        }
+                    });
+
+                    db.forEach(function(s, i) {
+                        var score = s.intersection(d).toArray().length;
+
+                        if (score == max) {
+                            console.log(s.symmetricDifference(d).toArray()[0]);
+                        }
+                    });
+                }
 
                 fs.unlinkSync(tmp);
                 fs.unlinkSync(tmp + '.m');

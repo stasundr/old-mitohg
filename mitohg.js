@@ -120,23 +120,23 @@ fs.exists(sequencePath, function (exist) {
                 });
 
                 // Если очень много данных отсутствует
-                if (max == 0) {
-                    db.forEach(function(s) {
-                        var score = s.intersection(d).toArray().length;
-                        if (score > max) {
-                            max = score;
-                            result = s.symmetricDifference(d).toArray();
-                        }
-                    });
-
-                    db.forEach(function(s, i) {
-                        var score = s.intersection(d).toArray().length;
-
-                        if (score == max) {
-                            console.log(s.symmetricDifference(d).toArray()[0]);
-                        }
-                    });
-                }
+                //if (max == 0) {
+                //    db.forEach(function(s) {
+                //        var score = s.intersection(d).toArray().length;
+                //        if (score > max) {
+                //            max = score;
+                //            result = s.symmetricDifference(d).toArray();
+                //        }
+                //    });
+                //
+                //    db.forEach(function(s, i) {
+                //        var score = s.intersection(d).toArray().length;
+                //
+                //        if (score == max) {
+                //            console.log(s.symmetricDifference(d).toArray()[0]);
+                //        }
+                //    });
+                //}
 
                 fs.unlinkSync(tmp);
                 fs.unlinkSync(tmp + '.m');
